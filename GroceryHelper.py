@@ -4,6 +4,7 @@ from datetime import date
 
 groceries = {}
 
+# load groceries dictionary from csv file
 def readFile():
     global groceries
     
@@ -14,15 +15,18 @@ def readFile():
             entry = lines[0].split(";")
             groceries[entry[0].lower()] = date.fromisoformat(entry[1]) - date.today()
 
+# save groceries dictionary to csv file in original format
 def saveFile():
     global groceries
-    
+
     # write to csv file from groceries dictionary in format "item; expiry date"
     with open('groceries.csv', mode = 'w') as file:
         csvFile = csv.writer(file, delimiter=";")
         for item in groceries.keys():
             groceries[item] += date.today() # change back to date format again
             csvFile.writerow([item,groceries[item]])
+
+    # confirmation message
     print("...saved grocery list to groceries.csv")
 
 # get input for an item name that is in the grocery list
@@ -33,6 +37,7 @@ def getExistingItemNameInput() -> str:
         displayGroceryList()
         print()
         name = input("Enter name of item => ")
+
     return name
 
 # turn string input of date in iso format into date
@@ -67,6 +72,7 @@ def displayGroceryList():
         else:
             print(f"{daysLeft} days left")  
 
+# add item to grocery list
 # expiryDate has to be string of date in ISO format
 def addItem():
     name = input("Enter name of item => ")
@@ -78,6 +84,7 @@ def addItem():
 
     print(f"Successfully added {name} to grocery list")
 
+# change expiry date of existing item in grocery list
 def editItem():
     if len(groceries) == 0:
         print("~No groceries in the list...")
@@ -86,6 +93,7 @@ def editItem():
     groceries[name] = getValidDateInput() - date.today()
     print(f"Successfully updated expiry date of {name}")
 
+# remove existing item in grocery list
 def removeItem():
     if len(groceries) == 0:
         print("~No groceries in the list...")
@@ -94,6 +102,7 @@ def removeItem():
     groceries.pop(name)
     print(f"Successfully removed {name} from grocery list")
 
+# menu with options of what to do in the program
 def displayOptions():
     print()
     print("===============================")
@@ -114,7 +123,7 @@ def displayOptions():
     elif option == "4":
         displayGroceryList()
     elif option == "5":
-        saveFile()
+        saveFile() # saving grocery modifications to csv file before ending program
         exit()
     else:
         print("Not a valid option... please try again")
