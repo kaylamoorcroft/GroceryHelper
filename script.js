@@ -29,9 +29,13 @@ const addItem = () => {
     updateGroceryList();
     reset();
 }
-
+const deleteItem = (buttonEl) => {
+    const removeIndex = groceries.findIndex((item) => item.name == buttonEl.parentElement.parentElement.id);
+    console.log(removeIndex);
+    buttonEl.parentElement.parentElement.remove();
+    groceries.splice(removeIndex,1);
+}
 const updateGroceryList = () => {
-    console.log("today is",new Date());
     const localOffset = new Date().getTimezoneOffset() * 60000; // in minutes, converted to ms
     const msPerDay = 60*60*24*1000;
     groceries.sort((a,b) => a.expiryDate - b.expiryDate);
@@ -50,13 +54,13 @@ const updateGroceryList = () => {
             expiryText = "EXPIRED " + -daysLeft + " DAYS AGO"
         }
         table.innerHTML += `
-        <tr class="grocery-item">
+        <tr id=${name}>
             <th>${name}:</th>
             <td>${expiryText}</td>
-            <td><i class="fa-regular fa-pen-to-square"></i></td>
-            <td><i class="fa-regular fa-trash-can"></i></td>
-        </tr>`;
-        console.log(name, expiryDate);
+            <td><i class="fa-regular fa-pen-to-square onclick="editItem(this)"></i></td>
+            <td><i class="fa-regular fa-trash-can" onclick="deleteItem(this)"></i></td>
+        </tr>
+        `;
     });
 }
 
