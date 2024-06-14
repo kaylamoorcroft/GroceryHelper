@@ -14,6 +14,28 @@ def main():
             entry = lines[0].split(";")
             groceries[entry[0].lower()] = date.fromisoformat(entry[1]) - date.today()
 
+# get input for an item name that is in the grocery list
+def getExistingItemNameInput() -> str:
+    name = input("Enter name of item => ")
+    while name not in groceries.keys():
+        print("~ Item does not exist. Please select an item from the existing grocery list:")
+        displayGroceryList()
+        print()
+        name = input("Enter name of item => ")
+    return name
+
+# turn string input of date in iso format into date
+def getValidDateInput() -> date:
+    invalidDateFormat = True
+    while invalidDateFormat:
+        try:
+            expiryDate = input("Enter expiry date in format YYYY-MM-DD => ")
+            expiryDate = date.fromisoformat(expiryDate)
+            invalidDateFormat = False
+        except: 
+            print("~ Not a valid date format... ")
+    return expiryDate
+
 def displayGroceryList():
     global groceries
     # sort by soonest expiry so priorities are at top of list
@@ -31,7 +53,6 @@ def displayGroceryList():
         else:
             print("{0} days left".format(daysLeft))  
 
-# returns true if successfully added item to grocery list
 # expiryDate has to be string of date in ISO format
 def addItem():
     name = input("Enter name of item => ")
@@ -39,23 +60,15 @@ def addItem():
         print("~ Name already exists - choose a new name for the item")
         name = input("Enter name of item => ")
     
-    invalidDateFormat = True
-    while invalidDateFormat:
-        try:
-            expiryDate = input("Enter expiry date in format YYYY-MM-DD => ")
-            groceries[name] = date.fromisoformat(expiryDate) - date.today()
-            invalidDateFormat = False
-        except: 
-            print("~ Not a valid date format... ")
+    groceries[name] = getValidDateInput() - date.today()
+
+    print("Successfully added {0} to grocery list".format(name))
+
 
 def removeItem():
-    name = input("Enter name of item => ")
-    while name not in groceries.keys():
-        print("~ Item does not exist. Please select an item from the existing grocery list:")
-        displayGroceryList()
-        print()
-        name = input("Enter name of item => ")
+    name = getExistingItemNameInput()
     groceries.pop(name)
+    print("Successfully removed {0} from grocery list".format(name))
 
 def displayOptions():
     print()
