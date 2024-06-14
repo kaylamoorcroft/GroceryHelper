@@ -13,7 +13,9 @@ def main():
         for lines in csvFile:
             entry = lines[0].split(";")
             groceries[entry[0].lower()] = date.fromisoformat(entry[1]) - date.today()
-    
+
+def displayGroceryList():
+    global groceries
     # sort by soonest expiry so priorities are at top of list
     # sorted method returns list, so need to convert back to dict
     groceries = dict(sorted(groceries.items(), key=lambda item: item[1]))
@@ -28,13 +30,16 @@ def main():
             print("EXPIRED {0} DAYS AGO".format(-daysLeft))
         else:
             print("{0} days left".format(daysLeft))  
-         
+
 # returns true if successfully added item to grocery list
 # expiryDate has to be string of date in ISO format
 def addItem(name: str, expiryDate: str):
+    name = input("Enter name of item => ")
     if name in groceries.keys():
         print("~ Name already exists - choose a new name for the item")
         return False
+    
+    date = input("Enter expiry date in format YYYY-MM-DD => ")
     try:
         groceries[name] = date.fromisoformat(expiryDate)
     except: 
@@ -43,20 +48,21 @@ def addItem(name: str, expiryDate: str):
     return True
 
 def displayOptions(option = "0"):
-    if not option:
+    if option == "0":
         print()
         print("===============================")
         print("Choose an option from the menu:")
         print("1. Add an item")
-        print("2. Exit program")
+        print("2. Display grocery list")
+        print("3. Exit program")
         option = input("Type 1 / 2 => ")
+    print("---------------------")
     if option == "1":
-        print("---------------------")
-        name = input("Enter name of item => ")
-        date = input("Enter expiry date in format YYYY-MM-DD => ")
-        if not addItem(name, date):
+        if not addItem():
             displayOptions(option)
     elif option == "2":
+        displayGroceryList()
+    elif option == "3":
         exit()
     else:
         print("Not a valid option... please try again")
