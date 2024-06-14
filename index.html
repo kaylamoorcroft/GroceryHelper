@@ -15,19 +15,19 @@
         <main>
             <div id="groceries-holder">
                 <table cellspacing="0">
-                    <tr class="grocery-item">
+                    <tr id="milk">
                         <th>milk:</th>
                         <td>EXPIRING TODAY</td>
                         <td><i class="fa-regular fa-pen-to-square"></i></td>
                         <td><i class="fa-regular fa-trash-can"></i></td>
                     </tr>
-                    <tr class="grocery-item">
+                    <tr id="ham">
                         <th>ham:</th>
                         <td>14 days left</td>
                         <td><i class="fa-regular fa-pen-to-square"></i></td>
                         <td><i class="fa-regular fa-trash-can"></i></td>
                     </tr>
-                    <tr class="grocery-item">
+                    <tr id="cereal">
                         <th>cereal:</th>
                         <td>30 days left</td>
                         <td><i class="fa-regular fa-pen-to-square"></i></td>
@@ -35,7 +35,17 @@
                     </tr>
                 </table>
             </div>
-            <button type="button">Add item</button>
+            <button id="add-item-btn" type="button">Add item</button>
+            <form id="item-editor-window" class="hidden">
+                <i id="cancel-btn" class="fa-solid fa-x"></i>
+                <label for="name-input">Name:
+                    <input id="name-input" type="text" required>
+                </label>
+                <label for="name-input">Date:
+                    <input id="date-input" type="date" required>
+                </label>
+                <button id="confirm-btn" type="button">Confirm</button>
+            </form>
         </main>
         <script src="script.js"></script>
 	</body>
