@@ -47,24 +47,33 @@ def addItem():
             invalidDateFormat = False
         except: 
             print("~ Not a valid date format... ")
-    
 
-
-def displayOptions(option = "0"):
-    if option == "0":
+def removeItem():
+    name = input("Enter name of item => ")
+    while name not in groceries.keys():
+        print("~ Item does not exist. Please select an item from the existing grocery list:")
+        displayGroceryList()
         print()
-        print("===============================")
-        print("Choose an option from the menu:")
-        print("1. Add an item")
-        print("2. Display grocery list")
-        print("3. Exit program")
-        option = input("Type 1 / 2 => ")
+        name = input("Enter name of item => ")
+    groceries.pop(name)
+
+def displayOptions():
+    print()
+    print("===============================")
+    print("Choose an option from the menu:")
+    print("1. Add an item")
+    print("2. Remove an item")
+    print("3. Display grocery list")
+    print("4. Exit program")
+    option = input("Type 1/2/3/4 => ")
     print("---------------------")
     if option == "1":
         addItem()
     elif option == "2":
-        displayGroceryList()
+        removeItem()
     elif option == "3":
+        displayGroceryList()
+    elif option == "4":
         exit()
     else:
         print("Not a valid option... please try again")
