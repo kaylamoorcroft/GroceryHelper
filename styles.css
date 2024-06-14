@@ -115,3 +115,8 @@ input, label {
 input {
     font-family: "Josefin Sans", Calibri, "Trebuchet MS", sans-serif;
 }
+.important {
+    text-transform: uppercase;
+    color: red;
+    font-weight: bold;
+}
