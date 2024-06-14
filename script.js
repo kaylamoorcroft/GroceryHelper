@@ -8,25 +8,12 @@ const confirmBtn = document.getElementById("confirm-btn");
 
 let currentItem = {};
 
-groceries = [
-    {
-        name: "milk",
-        expiryDate: new Date("2024-05-05")
-    },
-    {
-        name: "ham",
-        expiryDate: new Date("2024-06-27")
-    },
-    {
-        name: "cereal",
-        expiryDate: new Date("2024-07-14") 
-    }
-];
+const groceries = JSON.parse(localStorage.getItem("data")) || [];
 
 const addOrUpdateItem = () => {
     if (!nameInput.value) {
         window.alert("Please add a name for the item");
-        return
+        return;
     }
     const dateFormat = /\d{4}-\d{2}-\d{2}/;
     if (!dateFormat.test(dateInput.value)) {
@@ -36,32 +23,30 @@ const addOrUpdateItem = () => {
     const itemIndex = groceries.findIndex((item) => item.name == nameInput.value);
     const newItem = {
         name: nameInput.value,
-        expiryDate: new Date(dateInput.value)
+        expiryDate: dateInput.value
     };
     if (itemIndex === -1) {
         groceries.push(newItem);
     }
     else {
-        console.log(`"${groceries[itemIndex].name}" vs "${nameInput.value}"`);
         if (groceries[itemIndex].name === nameInput.value) {
-            const editItemInstead = confirm(`An "${nameInput.value}" item already exists. If you would like to modify the existing item, click okay. Otherwise, click cancel and give the item a new name.`);
+            const editItemInstead = confirm(`An "${nameInput.value}" item already exists. Click OK to overwrite the existing item.`);
             if (!editItemInstead) {
                 return;
             }
         }
         groceries[itemIndex] = newItem;
     }
+    localStorage.setItem("data", JSON.stringify(groceries));
     updateGroceryList();
     reset();
 }
 const editItem = (buttonEl) => {
     const itemIndex = groceries.findIndex((item) => item.name == buttonEl.parentElement.parentElement.id);
     currentItem = groceries[itemIndex];
-    const date = currentItem.expiryDate;
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
 
     nameInput.value = currentItem.name;
-    dateInput.value = formattedDate;
+    dateInput.value = currentItem.expiryDate;
 
     itemEditorWindow.classList.remove("hidden");
 }
@@ -69,15 +54,17 @@ const deleteItem = (buttonEl) => {
     const itemIndex = groceries.findIndex((item) => item.name == buttonEl.parentElement.parentElement.id);
     buttonEl.parentElement.parentElement.remove();
     groceries.splice(itemIndex,1);
+    localStorage.setItem("data", JSON.stringify(groceries));
 }
 const updateGroceryList = () => {
     const localOffset = new Date().getTimezoneOffset() * 60000; // in minutes, converted to ms
     const msPerDay = 60*60*24*1000;
-    groceries.sort((a,b) => a.expiryDate - b.expiryDate);
+    groceries.sort((a,b) => new Date(a.expiryDate) - new Date(b.expiryDate));
     table.innerHTML = "";
     groceries.forEach(({name,expiryDate}) => {
-        expiryDate.setTime(expiryDate.getTime() + localOffset);
-        const daysLeft = Math.ceil((expiryDate - new Date())/msPerDay);
+        const date = new Date(expiryDate);
+        date.setTime(date.getTime() + localOffset);
+        const daysLeft = Math.ceil((date - new Date())/msPerDay);
         let expiryText = "";
         if (daysLeft > 0) {
             expiryText = `${daysLeft} days left`;
@@ -104,6 +91,10 @@ const reset = () => {
     nameInput.value = "";
     dateInput.value = "";
     currentItem = {};
+}
+
+if (groceries.length) {
+    updateGroceryList();
 }
 
 addItemBtn.addEventListener("click", () => {
