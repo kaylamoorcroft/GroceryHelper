@@ -33,19 +33,22 @@ def displayGroceryList():
 
 # returns true if successfully added item to grocery list
 # expiryDate has to be string of date in ISO format
-def addItem(name: str, expiryDate: str):
+def addItem():
     name = input("Enter name of item => ")
-    if name in groceries.keys():
+    while name in groceries.keys():
         print("~ Name already exists - choose a new name for the item")
-        return False
+        name = input("Enter name of item => ")
     
-    date = input("Enter expiry date in format YYYY-MM-DD => ")
-    try:
-        groceries[name] = date.fromisoformat(expiryDate)
-    except: 
-        print("~ Not a valid date format... please enter date in the format YYYY-MM-DD")
-        return False
-    return True
+    invalidDateFormat = True
+    while invalidDateFormat:
+        try:
+            expiryDate = input("Enter expiry date in format YYYY-MM-DD => ")
+            groceries[name] = date.fromisoformat(expiryDate) - date.today()
+            invalidDateFormat = False
+        except: 
+            print("~ Not a valid date format... ")
+    
+
 
 def displayOptions(option = "0"):
     if option == "0":
@@ -58,8 +61,7 @@ def displayOptions(option = "0"):
         option = input("Type 1 / 2 => ")
     print("---------------------")
     if option == "1":
-        if not addItem():
-            displayOptions(option)
+        addItem()
     elif option == "2":
         displayGroceryList()
     elif option == "3":
