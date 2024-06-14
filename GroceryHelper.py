@@ -4,7 +4,7 @@ from datetime import date
 
 groceries = {}
 
-def main():
+def readFile():
     global groceries
     
     # read csv file and save into groceries dictionary in format "item: days left"
@@ -13,6 +13,17 @@ def main():
         for lines in csvFile:
             entry = lines[0].split(";")
             groceries[entry[0].lower()] = date.fromisoformat(entry[1]) - date.today()
+
+def saveFile():
+    global groceries
+    
+    # write to csv file from groceries dictionary in format "item; expiry date"
+    with open('groceries.csv', mode = 'w') as file:
+        csvFile = csv.writer(file, delimiter=";")
+        for item in groceries.keys():
+            groceries[item] += date.today() # change back to date format again
+            csvFile.writerow([item,groceries[item]])
+    print("...saved grocery list to groceries.csv")
 
 # get input for an item name that is in the grocery list
 def getExistingItemNameInput() -> str:
@@ -38,6 +49,9 @@ def getValidDateInput() -> date:
 
 def displayGroceryList():
     global groceries
+    if len(groceries) == 0:
+        print("~No groceries in the list...")
+        return
     # sort by soonest expiry so priorities are at top of list
     # sorted method returns list, so need to convert back to dict
     groceries = dict(sorted(groceries.items(), key=lambda item: item[1]))
@@ -49,9 +63,9 @@ def displayGroceryList():
         if daysLeft == 0:
             print("EXPIRING TODAY")
         elif daysLeft < 0:
-            print("EXPIRED {0} DAYS AGO".format(-daysLeft))
+            print(f"EXPIRED {-daysLeft} DAYS AGO")
         else:
-            print("{0} days left".format(daysLeft))  
+            print(f"{daysLeft} days left")  
 
 # expiryDate has to be string of date in ISO format
 def addItem():
@@ -62,17 +76,23 @@ def addItem():
     
     groceries[name] = getValidDateInput() - date.today()
 
-    print("Successfully added {0} to grocery list".format(name))
+    print(f"Successfully added {name} to grocery list")
 
 def editItem():
+    if len(groceries) == 0:
+        print("~No groceries in the list...")
+        return
     name = getExistingItemNameInput()
     groceries[name] = getValidDateInput() - date.today()
-    print("Successfully updated expiry date of {0}".format(name))
+    print(f"Successfully updated expiry date of {name}")
 
 def removeItem():
+    if len(groceries) == 0:
+        print("~No groceries in the list...")
+        return
     name = getExistingItemNameInput()
     groceries.pop(name)
-    print("Successfully removed {0} from grocery list".format(name))
+    print(f"Successfully removed {name} from grocery list")
 
 def displayOptions():
     print()
@@ -94,6 +114,7 @@ def displayOptions():
     elif option == "4":
         displayGroceryList()
     elif option == "5":
+        saveFile()
         exit()
     else:
         print("Not a valid option... please try again")
@@ -102,7 +123,7 @@ def displayOptions():
     displayOptions()
     
 if __name__ == "__main__":
-    main()
+    readFile()
     displayOptions()
 
    
