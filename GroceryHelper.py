@@ -64,6 +64,10 @@ def addItem():
 
     print("Successfully added {0} to grocery list".format(name))
 
+def editItem():
+    name = getExistingItemNameInput()
+    groceries[name] = getValidDateInput() - date.today()
+    print("Successfully updated expiry date of {0}".format(name))
 
 def removeItem():
     name = getExistingItemNameInput()
@@ -75,18 +79,21 @@ def displayOptions():
     print("===============================")
     print("Choose an option from the menu:")
     print("1. Add an item")
-    print("2. Remove an item")
-    print("3. Display grocery list")
-    print("4. Exit program")
-    option = input("Type 1/2/3/4 => ")
+    print("2. Update an item")
+    print("3. Remove an item")
+    print("4. Display grocery list")
+    print("5. Exit program")
+    option = input("Type 1/2/3/4/5 => ")
     print("---------------------")
     if option == "1":
         addItem()
     elif option == "2":
-        removeItem()
+        editItem()
     elif option == "3":
-        displayGroceryList()
+        removeItem()
     elif option == "4":
+        displayGroceryList()
+    elif option == "5":
         exit()
     else:
         print("Not a valid option... please try again")
