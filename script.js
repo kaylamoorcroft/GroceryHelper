@@ -5,6 +5,10 @@ const nameInput = document.getElementById("name-input");
 const dateInput = document.getElementById("date-input");
 const cancelBtn = document.getElementById("cancel-btn");
 const confirmBtn = document.getElementById("confirm-btn");
+const csvImportBtn = document.getElementById("csv-import-btn");
+const uploadCsvWindow = document.getElementById("upload-csv");
+const submitCsvBtn = document.getElementById("submit-csv-btn");
+const cancelUploadBtn = document.getElementById("cancel-upload-btn");
 /** Grocery item currently selected to edit */
 let currentItem = {};
 /** Array of stored grocery items */
@@ -123,7 +127,18 @@ if (groceries.length) {
 }
 
 // button click event listeners
-
 addItemBtn.addEventListener("click", () => { setItemEditorWindowVisible(true); })
 cancelBtn.addEventListener("click", reset)
 confirmBtn.addEventListener("click", addOrUpdateItem);
+csvImportBtn.addEventListener("click", () => {
+    csvImportBtn.classList.add("hidden");
+    uploadCsvWindow.classList.remove("hidden");
+    console.log(`import button is ${csvImportBtn.classList.contains("hidden") ? "hidden" : "visible"}`);
+    console.log(`upload window is ${uploadCsvWindow.classList.contains("hidden") ? "hidden" : "visible"}`);
+});
+cancelUploadBtn.addEventListener("click", () => {
+    csvImportBtn.classList.remove("hidden");
+    uploadCsvWindow.classList.add("hidden");
+    console.log(`import button is ${csvImportBtn.classList.contains("hidden") ? "hidden" : "visible"}`);
+    console.log(`upload window is ${uploadCsvWindow.classList.contains("hidden") ? "hidden" : "visible"}`);
+});

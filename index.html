@@ -11,6 +11,14 @@
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 	</head>
 	<body>
+        <form id="import-from-csv">
+            <button id="csv-import-btn">Import from CSV</button>
+            <div id="upload-csv" class="hidden">
+                <i id="cancel-upload-btn" class="fa-solid fa-x"></i>
+                <input type="file" name="csv-file" id="csv-file" required />
+                <button type="submit" id="submit-csv-btn">Submit</button>
+            </div>
+        </form>
         <h1>Grocery Helper</h1>
         <main>
             <div id="groceries-holder">
