@@ -9,10 +9,11 @@ const csvImportBtn = document.getElementById("csv-import-btn");
 const uploadCsvWindow = document.getElementById("upload-csv");
 const submitCsvBtn = document.getElementById("submit-csv-btn");
 const cancelUploadBtn = document.getElementById("cancel-upload-btn");
+const csvFile = document.getElementById("csv-file");
 /** Grocery item currently selected to edit */
 let currentItem = {};
 /** Array of stored grocery items */
-const groceries = JSON.parse(localStorage.getItem("data")) || [];
+let groceries = JSON.parse(localStorage.getItem("data")) || [];
 /** Adds/modifies grocery item in array through form input. Updates storage data and UI to reflect the change. */
 const addOrUpdateItem = () => {
     // input validation
@@ -141,4 +142,23 @@ cancelUploadBtn.addEventListener("click", () => {
     uploadCsvWindow.classList.add("hidden");
     console.log(`import button is ${csvImportBtn.classList.contains("hidden") ? "hidden" : "visible"}`);
     console.log(`upload window is ${uploadCsvWindow.classList.contains("hidden") ? "hidden" : "visible"}`);
+});
+submitCsvBtn.addEventListener("click", e => {
+    const fileInput = csvFile.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        // ovewrite groceries
+        groceries = [];
+        e.target.result.split("\r\n").map(item => {
+            if (!item) return; // ignore blank lines
+            const vals = item.split(/,|;|\|| /); // split by all delimiters 
+            groceries.push({ name: vals[0], expiryDate: vals[1] });
+        });
+        // update UI and data in storage
+        updateGroceryList();
+        localStorage.setItem("data", JSON.stringify(groceries));
+    };
+    reader.readAsText(fileInput);
+    csvImportBtn.classList.remove("hidden");
+    uploadCsvWindow.classList.add("hidden");
 });
