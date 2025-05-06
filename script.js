@@ -98,7 +98,7 @@ const updateGroceryList = () => {
         }
         // new table row with grocery item
         table.innerHTML += `
-        <tr id=${name}>
+        <tr id="${name}">
             <th>${name}:</th>
             <td>${expiryText}</td>
             <td><i class="fa-regular fa-pen-to-square" onclick="editItem(this)"></i></td>
