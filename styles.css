@@ -114,7 +114,7 @@ button:hover {
 }
 #item-editor-window:not(.hidden) {
     position: absolute;
-    top: 126px;
+    top: 166px;
     background-color: var(--dark);
     color: white;
     text-align: center;
